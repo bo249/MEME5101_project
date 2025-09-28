@@ -1,1 +1,1 @@
-savedcmd_/home/pi/code/MEME5101Project/module/buzzer/buzzer_k.mod := printf '%s\n'   buzzer_k.o | awk '!x[$$0]++ { print("/home/pi/code/MEME5101Project/module/buzzer/"$$0) }' > /home/pi/code/MEME5101Project/module/buzzer/buzzer_k.mod
+savedcmd_/home/pi/code/MEME5101_project/raspberrypi/module/buzzer/buzzer_k.mod := printf '%s\n'   buzzer_k.o | awk '!x[$$0]++ { print("/home/pi/code/MEME5101_project/raspberrypi/module/buzzer/"$$0) }' > /home/pi/code/MEME5101_project/raspberrypi/module/buzzer/buzzer_k.mod

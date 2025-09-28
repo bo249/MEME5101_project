@@ -26,14 +26,6 @@ int main() {
     int lock_alarm = 0;
     time_t alert_start_time = 0;
 
-    // 開啟蜂鳴器裝置
-    /*
-    buzzer_fd = open(DEVICE_FILE_NAME, O_RDWR);
-    if (buzzer_fd < 0) {
-        printf("Can't open buzzer device file: %s\n", DEVICE_FILE_NAME);
-        exit(-1);
-    }*/
-
     printf("障礙物偵測中...\n");
 
     while (1) {
@@ -59,7 +51,7 @@ int main() {
             int elapsed = (int)(now - alert_start_time);
             if (elapsed >= ALERT_DURATION) {
                 // 超過 10 秒，蜂鳴器常開
-                printf("障礙物距離<=50mm，且停留超過10秒，蜂鳴器常開！\n");
+                printf("障礙物距離<=50mm，且停留超過5秒，蜂鳴器常開！\n");
                 control_buzzer_on(buzzer_fd);
                 sleep(1);
             } else {
