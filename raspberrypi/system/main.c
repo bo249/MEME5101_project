@@ -17,20 +17,22 @@
 void sonic_measure(int distances[4]);
 void control_buzzer_on(int fd);
 void control_buzzer_off(int fd);
+int open_dev();
 
 int main() {
     int distances[4];
-    int buzzer_fd;
+    int buzzer_fd = open_dev();
     int abnormal_flag = 0;
     int lock_alarm = 0;
     time_t alert_start_time = 0;
 
     // 開啟蜂鳴器裝置
+    /*
     buzzer_fd = open(DEVICE_FILE_NAME, O_RDWR);
     if (buzzer_fd < 0) {
         printf("Can't open buzzer device file: %s\n", DEVICE_FILE_NAME);
         exit(-1);
-    }
+    }*/
 
     printf("障礙物偵測中...\n");
 
@@ -83,6 +85,15 @@ int main() {
 
     close(buzzer_fd);
     return 0;
+}
+
+int open_dev() {
+    int fd = open(DEVICE_FILE_NAME, O_RDWR);
+    if (fd < 0) {
+        printf("Can't open buzzer device file: %s\n", DEVICE_FILE_NAME);
+        exit(-1);
+    }
+    return fd;
 }
 
 void sonic_measure(int distances[4]) {
