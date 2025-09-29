@@ -40,50 +40,22 @@ int main() {
             }
         }
 
-        if (lock_alarm) {
-            // 進入異常鎖定狀態，蜂鳴器持續響
-            control_buzzer_on(buzzer_fd);
-            printf("===異常鎖定狀態！蜂鳴器長響，請移除障礙物後人工解除異常===\n");
-            // 判斷障礙物是否已經遠離
-            int all_far = 1;
-            for (int i = 0; i < 4; i++) {
-                if (distances[i] >= 0 && distances[i] < THRESHOLD_DISTANCE) {
-                    all_far = 0;
-                    break;
-                }
-            }
-            if (all_far) {
-                printf("障礙物已遠離，請按下 Enter 鍵解除異常狀態...\n");
-                getchar(); // 等待人工解除（或改成偵測GPIO輸入）
-                control_buzzer_off(buzzer_fd);
-                lock_alarm = 0;
-                abnormal_flag = 0;
-                alert_start_time = 0;
-                printf("異常解除，恢復偵測中...\n");
-                sleep(1);
-            } else {
-                sleep(1);
-            }
-            continue; // 持續在鎖定流程，直到人工解除
-        }
-
         if (is_alert) {
             // 首次進入異常，開始計時
             if (!abnormal_flag) {
                 alert_start_time = time(NULL);
                 abnormal_flag = 1;
             }
-            // 判斷異常是否持續超過 ALERT_DURATION 秒
+            // 判斷異常是否持續超過 10 秒
             time_t now = time(NULL);
             int elapsed = (int)(now - alert_start_time);
             if (elapsed >= ALERT_DURATION) {
-                // 進入異常鎖定狀態
-                printf("障礙物距離<=50mm，且停留超過5秒，異常鎖定！\n");
-                lock_alarm = 1;
+                // 超過 10 秒，蜂鳴器常開
+                printf("障礙物距離<=50mm，且停留超過5秒，蜂鳴器常開！\n");
                 control_buzzer_on(buzzer_fd);
-                continue; // 下回合進入lock_alarm分支
+                sleep(1);
             } else {
-                // 未超過 5 秒，蜂鳴器間歇警報
+                // 未超過 10 秒，蜂鳴器間歇警報
                 printf("障礙物距離<=50mm，蜂鳴器間歇警報中...\n");
                 control_buzzer_on(buzzer_fd);
                 usleep(200000);  // 蜂鳴200ms
